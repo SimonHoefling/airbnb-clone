@@ -10,17 +10,21 @@ class App extends Component {
     super(props);
     this.state = {
       flats: [],
-      selectedFlat: null
+      allFlats: [],
+      selectedFlat: null,
+      search: ""
     };
   }
 
+  // Fetching Data from the "fake" API (from GitHub repo)
   componentDidMount() {
     const url = "https://raw.githubusercontent.com/lewagon/flats-boilerplate/master/flats.json";
     fetch(url)
       .then(response => response.json())
       .then((data) => {
         this.setState({
-          flats: data
+          flats: data,
+          allFlats: data
         });
       })
   }
@@ -32,6 +36,15 @@ class App extends Component {
     })
   }
 
+  // Search bar
+  handleSearch = (event) => {
+    this.setState({
+      search: event.target.value,
+      flats: this.state.allFlats.filter((flat) => new RegExp(event.target.value, "i").exec(flat.name))
+    });
+  }
+
+  // Default render if no flat is selected
   render() {
     let center = {
       lat: 48.8566,
@@ -45,10 +58,16 @@ class App extends Component {
       }
     }
 
+    // Main HTML part that get's displayed
     return (
       <div className="app">
         <div className="main">
           <div className="search">
+            <input
+              type="text"
+              placeholder="Search..."
+              value={this.state.search}
+              onChange={this.handleSearch} />
           </div>
           <div className="flats">
             {this.state.flats.map((flat) => {
