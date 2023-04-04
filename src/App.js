@@ -30,7 +30,6 @@ class App extends Component {
   }
 
   selectFlat = (flat) => {
-    console.log(flat);
     this.setState({
       selectedFlat: flat
     })
